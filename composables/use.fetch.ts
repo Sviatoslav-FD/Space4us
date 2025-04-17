@@ -8,6 +8,7 @@ const baseUrl = 'https://space4us-node.vercel.app'
 export function useFetch(): UseFetchReturn {
   const fetchData = async (url: string, method?: string, body?: unknown | null | undefined) => {
     const headers = {
+      'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json',
       Connection: 'keep-alive',
       Accept: '*/*',
