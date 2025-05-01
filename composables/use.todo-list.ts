@@ -6,7 +6,9 @@ interface UseTodoListReturn {
   tasks: Ref<TaskItem[]>
   formTask: Ref<TaskItem>
   isTaskEdit: Ref<boolean>
-  categories: ComputedRef<{ title: string; }[]>
+  selectedCategory: Ref<string>
+  categories: ComputedRef<string[]>
+  filteredTasks: ComputedRef<TaskItem[]>
   getTasks: () => Promise<void>
   onAddTaskFormSubmit: () => void
   onClearForm: () => void
@@ -18,6 +20,8 @@ interface UseTodoListReturn {
 const tasks = ref<TaskItem[]>([])
 
 const isTaskEdit = ref<boolean>(false)
+
+const selectedCategory = ref<string>('')
 
 const defaultItem: TaskItem = {
   id: '',
@@ -37,10 +41,15 @@ const formTask = ref<TaskItem>({ ...defaultItem })
 export function useTodoList(): UseTodoListReturn {
   const { fetchData } = useFetch()
 
-  const categories = computed((): { title: string; }[] => {
-    const filteredCategories = tasks.value.filter(item => item.category).map(item => item.category)
-    const categoriesSet = [...new Set(filteredCategories)]
-    return categoriesSet.map(title => ({ title }))
+  const filteredTasks = computed(() => {
+    if (selectedCategory.value) {
+      return tasks.value.filter((task) => task.category === selectedCategory.value)
+    }
+    return tasks.value
+  })
+
+  const categories = computed((): string[] => {
+    return [...new Set(tasks.value.filter(item => item.category).map(item => item.category))]
   })
 
   const getTasks = async (): Promise<void> => {
@@ -108,7 +117,9 @@ export function useTodoList(): UseTodoListReturn {
     tasks,
     formTask,
     isTaskEdit,
+    selectedCategory,
     categories,
+    filteredTasks,
     getTasks,
     onAddTaskFormSubmit,
     onClearForm,

@@ -32,7 +32,7 @@
         class="border-t border-gray-200 p-1 hover:bg-teal-50 cursor-pointer"
         @click="onSelectOption(option)"
       >
-        {{ option[title] }}
+        {{ option[title] || option }}
       </li>
     </ul>
   </div>
@@ -71,17 +71,21 @@ const onToggleOptions = (): void => {
 }
 
 const setTitle = (id?: string) => {
+  if(typeof model.value === 'string') return model.value
   const value = id || model.value
   return props.options.find((i) => i[props.value] === value)?.[props.title]
 }
 
 const onSelectOption = (option: { [key: string]: string }): void => {
+  const value = typeof option === 'object' ? option[props.value] : option
+
   if (props.multiple && Array.isArray(model.value)) {
-    if (!model.value?.includes(option[props.value])) {
-      model.value?.push(option[props.value])
+    if (!model.value?.includes(value)) {
+      model.value?.push(value)
     }
   } else {
-    model.value = option[props.value]
+    model.value = value
+    console.log(model.value);
     isOpen.value = false
   }
 }
