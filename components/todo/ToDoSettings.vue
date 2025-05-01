@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between rounded border border-gray-300 p-1 bg-gray-100">
+  <div class="flex justify-between rounded border border-gray-300 p-1 mx-2 bg-gray-50">
     <AppButton
       v-for="item in settings.left"
       :key="item.title"

@@ -1,14 +1,8 @@
 <template>
-  <div class="w-full mx-auto max-w-7xl">
+  <div class="w-full mx-auto max-w-7xl h-dvh flex flex-col">
     <Header />
-    <ToDoAddForm />
-    <ToDoSettings />
-    <ToDoList />
+    <main>
+      <TaskManager />
+    </main>
   </div>
 </template>
-
-<script setup lang="ts">
-import ToDoAddForm from '@/components/todo/ToDoAddForm.vue'
-import ToDoSettings from '@/components/todo/ToDoSettings.vue'
-import ToDoList from '@/components/todo/ToDoList.vue'
-</script>

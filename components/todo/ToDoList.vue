@@ -1,5 +1,5 @@
 <template>
-  <ul class="overflow-y-auto overflow-x-hidden" @click="onListClickHandler">
+  <ul class="overflow-y-auto overflow-x-hidden mx-2" @click="onListClickHandler">
     <li
       v-for="task in tasks"
       :key="task.id"
@@ -14,7 +14,7 @@
         :contenteditable="true"
         @onChange="() => onToggleTask(task)"
       />
-      <p class="shrink-0 truncate text-gray-300">{{ task.description }}</p>
+      <p class="shrink-0 truncate text-gray-300">{{ task.description }} {{ hoveredItemId }}</p>
       <TaskActions :task :hoveredItemId />
     </li>
   </ul>

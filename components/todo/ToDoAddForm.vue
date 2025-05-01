@@ -1,11 +1,15 @@
 <template>
   <form
-    class="border rounded-b border-t-0 p-2 border-gray-300 bg-gray-50 mb-2"
-    @submit.prevent="onAddTaskFormSubmit"
+    class="border rounded p-2 border-gray-300 bg-gray-50 m-2"
+    @submit.prevent="onAddTask"
   >
-    <div class="grid grid-cols-2 gap-1 mb-1">
-      <AppInput v-model="formTask.title" placeholder="What to do?" required />
-      <AppInput v-model="formTask.category" placeholder="Any category?" />
+    <div class="grid grid-cols-3 gap-1 mb-1">
+      <AppInput v-model="formTask.title" placeholder="What to do?" required ref="taskTitleRef" />
+      <AppSelect
+        v-model="formTask.category"
+        placeholder="Any category?"
+        :options="categories"
+      />
       <AppSelect
         v-model="formTask.dependencies"
         placeholder="Depends on"
@@ -33,6 +37,14 @@ import AppSelect from '@/components/shared/AppSelect.vue'
 import AppTextarea from '@/components/shared/AppTextarea.vue'
 import AppButton from '@/components/shared/AppButton.vue'
 
+import { ref } from 'vue'
 import { useTodoList } from '@/composables/use.todo-list'
-const { tasks, formTask, isTaskEdit, onAddTaskFormSubmit, onClearForm } = useTodoList()
+const { tasks, formTask, isTaskEdit, categories, onAddTaskFormSubmit, onClearForm } = useTodoList()
+
+const taskTitleRef = ref<HTMLElement | null>(null)
+
+function onAddTask() {
+  onAddTaskFormSubmit()
+}
+
 </script>

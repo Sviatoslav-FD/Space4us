@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full text-purple-700">
+  <div class="relative w-full text-teal-700">
     <p v-if="label">{{ label }}<span v-if="required">*</span></p>
     <button
       ref="buttonRef"
@@ -23,13 +23,13 @@
     </button>
     <ul
       ref="optionsRef"
-      class="absolute bg-gray-100 z-1 rounded border border-gray-200 w-full mt-1"
+      class="absolute bg-gray-100 z-1 rounded border border-gray-200 w-full mt-1 max-h-83 overflow-y-auto shadow-lg"
       :class="{ hidden: !isOpen }"
     >
       <li
         v-for="option in options"
         :key="String(option)"
-        class="border-t border-gray-200 p-1 hover:bg-purple-50 cursor-pointer"
+        class="border-t border-gray-200 p-1 hover:bg-teal-50 cursor-pointer"
         @click="onSelectOption(option)"
       >
         {{ option[title] }}

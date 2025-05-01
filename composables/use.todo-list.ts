@@ -1,4 +1,4 @@
-import { type Ref, ref } from 'vue'
+import { type Ref, type ComputedRef, ref, computed } from 'vue'
 import { type TaskItem } from '@/types/index'
 import { useFetch } from '@/composables/use.fetch'
 
@@ -6,6 +6,7 @@ interface UseTodoListReturn {
   tasks: Ref<TaskItem[]>
   formTask: Ref<TaskItem>
   isTaskEdit: Ref<boolean>
+  categories: ComputedRef<{ title: string; }[]>
   getTasks: () => Promise<void>
   onAddTaskFormSubmit: () => void
   onClearForm: () => void
@@ -19,7 +20,7 @@ const tasks = ref<TaskItem[]>([])
 const isTaskEdit = ref<boolean>(false)
 
 const defaultItem: TaskItem = {
-  id: crypto.randomUUID(),
+  id: '',
   title: '',
   isDone: false,
   isUrgent: false,
@@ -35,6 +36,12 @@ const formTask = ref<TaskItem>({ ...defaultItem })
 
 export function useTodoList(): UseTodoListReturn {
   const { fetchData } = useFetch()
+
+  const categories = computed((): { title: string; }[] => {
+    const filteredCategories = tasks.value.filter(item => item.category).map(item => item.category)
+    const categoriesSet = [...new Set(filteredCategories)]
+    return categoriesSet.map(title => ({ title }))
+  })
 
   const getTasks = async (): Promise<void> => {
     tasks.value = await fetchData('/tasks')
@@ -53,7 +60,8 @@ export function useTodoList(): UseTodoListReturn {
   }
 
   const onAddTask = async (): Promise<void> => {
-    tasks.value = await fetchData('/tasks/add', 'POST', formTask.value)
+    const task = { ...formTask.value, id: crypto.randomUUID() }
+  tasks.value = await fetchData('/tasks/add', 'POST', task)
     onClearForm()
   }
 
@@ -80,7 +88,7 @@ export function useTodoList(): UseTodoListReturn {
   }
 
   const onDeleteItems = async (): Promise<void> => {
-    tasks.value = await fetchData(`/tasks/delete`, 'DELETE')
+    tasks.value = await fetchData(`/tasks/delete/clear`, 'DELETE')
     onClearForm()
   }
 
@@ -100,6 +108,7 @@ export function useTodoList(): UseTodoListReturn {
     tasks,
     formTask,
     isTaskEdit,
+    categories,
     getTasks,
     onAddTaskFormSubmit,
     onClearForm,

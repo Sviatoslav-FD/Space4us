@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const classes = computed<string>(() => {
   if (props.variant === 'secondary') {
-    return 'text-purple-700 underline'
+    return 'text-teal-700 underline'
   }
 
   if (props.variant === 'danger') {
@@ -30,6 +30,6 @@ const classes = computed<string>(() => {
     return 'px-2 bg-gray-200'
   }
 
-  return 'rounded border px-2 border-gray-300 bg-purple-300 text-purple-700'
+  return 'rounded border px-2 border-gray-300 bg-teal-300 text-teal-700'
 })
 </script>
