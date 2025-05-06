@@ -1,12 +1,12 @@
 <template>
-  <div class="flex justify-between rounded border border-gray-300 p-1 mx-2 bg-gray-50">
+  <div class="flex justify-between rounded border border-teal-300 p-1 mx-2 bg-teal-50 mt-2">
     <AppButton
       v-for="item in settings.left"
       :key="item.title"
       variant="secondary"
       class="ml-2"
       :title="item.title"
-      @click="item.fn"
+      @click.stop="item.fn"
     >
       <component :is="item.icon" />
     </AppButton>
@@ -17,7 +17,7 @@
       variant="secondary"
       class="ml-2"
       :title="item.title"
-      @click="item.fn"
+      @click.stop="item.fn"
     >
       <component :is="item.icon" />
     </AppButton>
@@ -45,8 +45,7 @@ const settings = {
     {
       title: 'Add template',
       icon: IconTemplate,
-      fn: (e: Event) => {
-        e.stopPropagation()
+      fn: () => {
         isAddTemplateOpen.value = true
       },
     },

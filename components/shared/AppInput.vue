@@ -1,13 +1,13 @@
 <template>
-  <label class="text-teal-700 w-full" :class="{ 'text-red-600': required && !model }">
+  <label class="text-teal-500 w-full" :class="{ 'user-invalid:text-red-600': required && !model }">
     <p v-if="label">{{ label }}<span v-if="required">*</span></p>
     <input
       v-model="model"
       :type
       :required
       :placeholder
-      class="w-full p-1 border rounded focus:outline-none border-gray-300 placeholder:text-gray-300 focus:border-teal-700"
-      :class="{ 'border-red-600': required && !model }"
+      class="w-full p-1 border rounded focus:outline-none border-gray-300 placeholder:text-gray-300 focus:border-teal-500"
+      :class="{ 'user-invalid:border-red-600': required && !model }"
     />
   </label>
 </template>

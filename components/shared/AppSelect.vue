@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full text-teal-700">
+  <div class="relative w-full text-teal-500">
     <p v-if="label">{{ label }}<span v-if="required">*</span></p>
     <button
       ref="buttonRef"
@@ -66,7 +66,8 @@ const model = defineModel<string[] | string>()
 
 const isOpen = ref(false)
 
-const onToggleOptions = (): void => {
+const onToggleOptions = (event: Event): void => {
+  event.preventDefault()
   isOpen.value = !isOpen.value
 }
 

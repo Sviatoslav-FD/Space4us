@@ -1,6 +1,9 @@
 export const clickOutside = (elements: (HTMLElement | null)[], callback: () => void) => {
   const handleClick = (event: MouseEvent) => {
-    if (elements.every((e) => !e?.contains(event.target as Node))) {
+    // Check if the click was outside of all elements
+    const isOutside = elements.every((element) => !element?.contains(event.target as Node))
+
+    if (isOutside) {
       callback()
     }
   }

@@ -6,6 +6,7 @@ interface UseTodoListReturn {
   tasks: Ref<TaskItem[]>
   formTask: Ref<TaskItem>
   isTaskEdit: Ref<boolean>
+  isTaskAddDialogOpen: Ref<boolean>
   selectedCategory: Ref<string>
   categories: ComputedRef<string[]>
   filteredTasks: ComputedRef<TaskItem[]>
@@ -20,6 +21,8 @@ interface UseTodoListReturn {
 const tasks = ref<TaskItem[]>([])
 
 const isTaskEdit = ref<boolean>(false)
+
+const isTaskAddDialogOpen = ref<boolean>(false)
 
 const selectedCategory = ref<string>('')
 
@@ -69,7 +72,7 @@ export function useTodoList(): UseTodoListReturn {
   }
 
   const onAddTask = async (): Promise<void> => {
-    const task = { ...formTask.value, id: crypto.randomUUID() }
+    const task = { ...formTask.value, id: crypto.randomUUID(), category: 'General' }
   tasks.value = await fetchData('/tasks/add', 'POST', task)
     onClearForm()
   }
@@ -89,6 +92,7 @@ export function useTodoList(): UseTodoListReturn {
     const editTask = tasks.value.find((item) => item.id === id)
     if (!editTask) return
     formTask.value = { ...editTask }
+    setTimeout(() => isTaskAddDialogOpen.value = true, 0)
   }
 
   const onClearForm = (): void => {
@@ -117,6 +121,7 @@ export function useTodoList(): UseTodoListReturn {
     tasks,
     formTask,
     isTaskEdit,
+    isTaskAddDialogOpen,
     selectedCategory,
     categories,
     filteredTasks,

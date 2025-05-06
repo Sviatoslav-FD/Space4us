@@ -4,7 +4,7 @@
 
     <div
       class="inline-block w-4 h-4 border rounded"
-      :class="model ? 'border-teal-700 bg-teal-700' : 'border-gray-300 bg-white'"
+      :class="model ? 'border-teal-500 bg-teal-500' : 'border-gray-300 bg-white'"
     >
       <IconCheck class="h-full mx-auto" />
     </div>
@@ -12,7 +12,7 @@
     <span
       :contenteditable
       class="ml-2 px-1 text-nowrap"
-      :class="model ? 'line-through' : 'text-teal-700'"
+      :class="model ? 'line-through' : 'text-teal-500'"
       @click.prevent
     >
       {{ label }}
