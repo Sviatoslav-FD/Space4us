@@ -72,7 +72,8 @@ export function useTodoList(): UseTodoListReturn {
   }
 
   const onAddTask = async (): Promise<void> => {
-    const task = { ...formTask.value, id: crypto.randomUUID(), category: 'General' }
+    const category = formTask.value.category || 'General'
+    const task = { ...formTask.value, id: crypto.randomUUID(), category }
   tasks.value = await fetchData('/tasks/add', 'POST', task)
     onClearForm()
   }

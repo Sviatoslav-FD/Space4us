@@ -6,11 +6,12 @@
       :key="category"
       :active="selectedCategory === category"
       @click="onTabSelected(category)">
-      {{ category }} 
+      {{ category }}
       <span class="bg-teal-200 rounded p-1">{{ categoriesAmount[category] }}</span>
     </AppTab>
   </AppTabs>
-  <ToDoList :filter="selectedCategory" />
+
+  <TaskList :filter="selectedCategory" />
 
   <TaskAddButton @click.stop="isTaskAddDialogOpen = true" />
   <TaskAddDialog v-model="isTaskAddDialogOpen" />
@@ -18,7 +19,7 @@
 
 <script setup lang="ts">
 import ToDoSettings from '@/components/todo/ToDoSettings.vue'
-import ToDoList from '@/components/todo/ToDoList.vue'
+import TaskList from '@/components/todo/TaskList.vue'
 import TaskAddButton from '@/components/todo/TaskAddButton.vue'
 import TaskAddDialog from '@/components/todo/TaskAddDialog.vue'
 import AppTabs from '@/components/shared/AppTabs.vue'

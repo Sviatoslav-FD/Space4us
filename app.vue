@@ -1,7 +1,7 @@
 <template>
-  <div class="w-full mx-auto max-w-7xl h-dvh flex flex-col">
+  <div class="w-full mx-auto max-w-7xl h-dvh flex flex-col max-h-dvh">
     <Header />
-    <main>
+    <main class="mt-16">
       <TaskManager />
     </main>
   </div>

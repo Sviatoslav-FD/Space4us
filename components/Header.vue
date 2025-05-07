@@ -1,8 +1,8 @@
 <template>
-  <header class="relative p-2 flex items-center border-b-2 border-teal-300 text-teal-300">
+  <header class="fixed w-full p-2 flex items-center border-b-2 border-teal-300 text-teal-300 z-20 bg-teal-50 shadow-xl shadow-teal-50">
     <p class="flex-grow font-semibold text-3xl">Space4US</p>
 
-    <nav class="bg-white flex-grow">
+    <nav class="flex-grow">
       <ul class="flex space-x-4">
         <!-- <li><a href="#" class="hover:text-teal-500">Projects</a></li> -->
         <li><a href="#" class="hover:text-teal-500">Tasks</a></li>

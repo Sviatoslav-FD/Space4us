@@ -1,5 +1,5 @@
 <template>
-  <ul class="overflow-y-auto overflow-x-hidden mx-2" @click="onListClickHandler">
+  <ul class="overflow-x-hidden mx-2" @click="onListClickHandler">
     <li
       v-for="task in filteredTasks"
       :key="task.id"
