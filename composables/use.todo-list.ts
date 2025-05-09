@@ -13,8 +13,8 @@ interface UseTodoListReturn {
   getTasks: () => Promise<void>
   onAddTaskFormSubmit: () => void
   onClearForm: () => void
-  onDeleteItems: () => Promise<void>
-  onToggleTask: (task: TaskItem) => Promise<void>
+  onDeleteItems: (id: string) => void
+  onEditTask: (task?: TaskItem) => void
   onListClickHandler: (payload: Event) => void
 }
 
@@ -52,11 +52,15 @@ export function useTodoList(): UseTodoListReturn {
   })
 
   const categories = computed((): string[] => {
-    return [...new Set(tasks.value.filter(item => item.category).map(item => item.category))]
+    return [...new Set(tasks.value?.filter(item => item.category).map(item => item.category))]
   })
 
-  const getTasks = async (): Promise<void> => {
-    tasks.value = await fetchData('/tasks')
+  const asyncRequest = (fn: Function): any => {
+    try {
+      return fn()
+    } catch (error) {
+      console.error('Error:', error)
+    }
   }
 
   const onAddTaskFormSubmit = (): void => {
@@ -64,28 +68,30 @@ export function useTodoList(): UseTodoListReturn {
       return
     }
 
-    if (isTaskEdit.value) {
-      onEditTask()
-    } else {
-      onAddTask()
-    }
+    isTaskEdit.value ? onEditTask() : onAddTask()
   }
 
-  const onAddTask = async (): Promise<void> => {
+  const getTasks = async (): Promise<void> => {
+    tasks.value = await asyncRequest(() => fetchData('/tasks'))
+  }
+
+  const onAddTask = (): void => {
     const category = formTask.value.category || 'General'
     const task = { ...formTask.value, id: crypto.randomUUID(), category }
-  tasks.value = await fetchData('/tasks/add', 'POST', task)
-    onClearForm()
+
+    asyncRequest(async () => {
+      await fetchData('/tasks/add', 'POST', task)
+      await getTasks()
+      onClearForm()
+    })
   }
 
-  const onEditTask = async (): Promise<void> => {
-    tasks.value = await fetchData(`/tasks/edit`, 'POST', formTask.value)
-    onClearForm()
-  }
-
-  const onToggleTask = async (task: TaskItem): Promise<void> => {
-    tasks.value = await fetchData(`/tasks/edit`, 'POST', task)
-    onClearForm()
+  const onEditTask = (task?: TaskItem): void => {
+    asyncRequest(async () => {
+      await fetchData(`/tasks/edit`, 'PUT', task || formTask.value)
+      await getTasks()
+      onClearForm()
+    })
   }
 
   const onStartEditTask = (id: string): void => {
@@ -101,20 +107,18 @@ export function useTodoList(): UseTodoListReturn {
     isTaskEdit.value = false
   }
 
-  const onDeleteItems = async (): Promise<void> => {
-    tasks.value = await fetchData(`/tasks/delete/clear`, 'DELETE')
-    onClearForm()
-  }
-
-  const onDeleteItem = async (id: string): Promise<void> => {
-    tasks.value = await fetchData(`/tasks/delete/${id}`, 'DELETE')
-    onClearForm()
+  const onDeleteItems = (id: string): void => {
+    asyncRequest(async () => {
+      await fetchData(`/tasks/delete/${id}`, 'DELETE')
+      await getTasks()
+      onClearForm()
+    })
   }
 
   const onListClickHandler = (event: Event): void => {
     const data = (event.target as HTMLElement)?.closest('button')?.dataset
     if (!data) return
-    if (data.delete) onDeleteItem(data.delete)
+    if (data.delete) onDeleteItems(data.delete)
     if (data.edit) onStartEditTask(data.edit)
   }
 
@@ -130,7 +134,7 @@ export function useTodoList(): UseTodoListReturn {
     onAddTaskFormSubmit,
     onClearForm,
     onDeleteItems,
-    onToggleTask,
+    onEditTask,
     onListClickHandler,
   }
 }

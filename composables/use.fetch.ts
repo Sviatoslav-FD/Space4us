@@ -3,7 +3,7 @@ interface UseFetchReturn {
   fetchData: (url: string, method?: string, body?: unknown | null | undefined) => any
 }
 
-const baseUrl = 'https://space4us-node.vercel.app'
+const baseUrl = 'http://localhost:7777'
 
 export function useFetch(): UseFetchReturn {
   const fetchData = async (url: string, method?: string, body?: unknown | null | undefined) => {
@@ -25,7 +25,7 @@ export function useFetch(): UseFetchReturn {
       }
 
       const json = await response.json()
-      return JSON.parse(json)
+      return json
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message)

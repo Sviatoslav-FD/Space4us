@@ -12,7 +12,7 @@
         v-model="task.isDone"
         :label="task.title"
         :contenteditable="true"
-        @onChange="() => onToggleTask(task)"
+        @onChange="() => onEditTask(task)"
       />
       <p class="shrink-0 truncate text-gray-300">{{ task.description }}</p>
       <TaskActions :task :hoveredItemId />
@@ -21,15 +21,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
+import { ref } from 'vue'
 import AppCheckbox from '@/components/shared/AppCheckbox.vue'
 import TaskActions from '@/components/todo/TaskActions.vue'
 
 import { useTodoList } from '@/composables/use.todo-list'
-const { filteredTasks, getTasks, onToggleTask, onListClickHandler } = useTodoList()
+const { filteredTasks, onEditTask, onListClickHandler } = useTodoList()
 
 const hoveredItemId = ref<string>('')
-
-onMounted(() => getTasks())
 </script>

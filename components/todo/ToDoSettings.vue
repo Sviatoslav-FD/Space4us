@@ -64,7 +64,7 @@ const settings = {
     {
       title: 'Clear tasks',
       icon: IconClear,
-      fn: onDeleteItems,
+      fn: () => onDeleteItems('clear'),
     },
   ],
 }

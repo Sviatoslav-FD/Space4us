@@ -21,7 +21,7 @@ const isListOpen = ref(false)
 
 const onGetCountries = async (): Promise<void> => {
   const { fetchData } = useFetch()
-  countries.value = await fetchData('/countries')
+  countries.value = JSON.parse(await fetchData('/countries'))
   if (!countries.value) return
   selectedCountry.value = countries.value[0]
 }
