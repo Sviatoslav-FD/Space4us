@@ -18,5 +18,4 @@
 
 <script lang="ts" setup>
 import AppCountrySelect from './AppCountrySelect.vue';
-
 </script>

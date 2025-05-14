@@ -9,7 +9,9 @@ interface UseTodoListReturn {
   isTaskAddDialogOpen: Ref<boolean>
   selectedCategory: Ref<string>
   categories: ComputedRef<string[]>
+  dates: ComputedRef<string[]>
   filteredTasks: ComputedRef<TaskItem[]>
+  view: Ref<string>
   getTasks: () => Promise<void>
   onAddTaskFormSubmit: () => void
   onClearForm: () => void
@@ -26,6 +28,8 @@ const isTaskAddDialogOpen = ref<boolean>(false)
 
 const selectedCategory = ref<string>('')
 
+const view = ref<string>('list')
+
 const defaultItem: TaskItem = {
   id: '',
   title: '',
@@ -34,7 +38,7 @@ const defaultItem: TaskItem = {
   isImportant: false,
   description: '',
   category: '',
-  date: new Date(),
+  date: undefined,
   dependencies: [],
   marks: [],
 }
@@ -42,8 +46,6 @@ const defaultItem: TaskItem = {
 const formTask = ref<TaskItem>({ ...defaultItem })
 
 export function useTodoList(): UseTodoListReturn {
-  const { fetchData } = useFetch()
-
   const filteredTasks = computed(() => {
     if (selectedCategory.value) {
       return tasks.value.filter((task) => task.category === selectedCategory.value)
@@ -55,13 +57,11 @@ export function useTodoList(): UseTodoListReturn {
     return [...new Set(tasks.value?.filter(item => item.category).map(item => item.category))]
   })
 
-  const asyncRequest = (fn: Function): any => {
-    try {
-      return fn()
-    } catch (error) {
-      console.error('Error:', error)
-    }
-  }
+  const dates = computed((): string[] => {
+    return [...new Set(tasks.value?.map(item => {
+      return item.date ? new Date(item.date).toLocaleDateString() : 'No date'
+    }))]
+  })
 
   const onAddTaskFormSubmit = (): void => {
     if (!formTask.value.title.trim().length) {
@@ -72,26 +72,48 @@ export function useTodoList(): UseTodoListReturn {
   }
 
   const getTasks = async (): Promise<void> => {
-    tasks.value = await asyncRequest(() => fetchData('/tasks'))
+    const { isLoading, fetchData } = useFetch()
+    isLoading.value = true
+
+    try {
+      tasks.value = await fetchData('/tasks')
+    } catch (error) {
+      console.error('Error:', error)
+    } finally {
+      isLoading.value = false
+    }
   }
 
-  const onAddTask = (): void => {
-    const category = formTask.value.category || 'General'
+  const onAddTask = async (): Promise<void> => {
+    const { isLoading, fetchData } = useFetch()
+    isLoading.value = true
+    const category = formTask.value.category || ''
     const task = { ...formTask.value, id: crypto.randomUUID(), category }
 
-    asyncRequest(async () => {
+    try {
       await fetchData('/tasks/add', 'POST', task)
       await getTasks()
       onClearForm()
-    })
+    } catch (error) {
+      console.error('Error:', error)
+    } finally {
+      isLoading.value = false
+    }
   }
 
-  const onEditTask = (task?: TaskItem): void => {
-    asyncRequest(async () => {
+  const onEditTask = async (task?: TaskItem): Promise<void> => {
+    const { isLoading, fetchData } = useFetch()
+    isLoading.value = true
+
+    try {
       await fetchData(`/tasks/edit`, 'PUT', task || formTask.value)
       await getTasks()
       onClearForm()
-    })
+    } catch (error) {
+      console.error('Error:', error)
+    } finally {
+      isLoading.value = false
+    }
   }
 
   const onStartEditTask = (id: string): void => {
@@ -107,12 +129,19 @@ export function useTodoList(): UseTodoListReturn {
     isTaskEdit.value = false
   }
 
-  const onDeleteItems = (id: string): void => {
-    asyncRequest(async () => {
+  const onDeleteItems = async (id: string): Promise<void> => {
+    const { isLoading, fetchData } = useFetch()
+    isLoading.value = true
+
+    try {
       await fetchData(`/tasks/delete/${id}`, 'DELETE')
       await getTasks()
       onClearForm()
-    })
+    } catch (error) {
+      console.error('Error:', error)
+    } finally {
+      isLoading.value = false
+    }
   }
 
   const onListClickHandler = (event: Event): void => {
@@ -129,7 +158,9 @@ export function useTodoList(): UseTodoListReturn {
     isTaskAddDialogOpen,
     selectedCategory,
     categories,
+    dates,
     filteredTasks,
+    view,
     getTasks,
     onAddTaskFormSubmit,
     onClearForm,

@@ -1,7 +1,7 @@
 <template>
   <ul class="overflow-x-hidden mx-2" @click="onListClickHandler">
     <li
-      v-for="task in filteredTasks"
+      v-for="task in tasks"
       :key="task.id"
       class="flex items-center border border-gray-100 my-2 bg-gray-50 h-10 relative"
       :class="{ 'opacity-50': task.isDone }"
@@ -22,11 +22,20 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { type TaskItem } from '@/types/index'
 import AppCheckbox from '@/components/shared/AppCheckbox.vue'
 import TaskActions from '@/components/todo/TaskActions.vue'
 
 import { useTodoList } from '@/composables/use.todo-list'
-const { filteredTasks, onEditTask, onListClickHandler } = useTodoList()
+const { onEditTask, onListClickHandler } = useTodoList()
+
+interface Props {
+  tasks: TaskItem[]
+}
+
+withDefaults(defineProps<Props>(), {
+  tasks: () => [] as TaskItem[],
+})
 
 const hoveredItemId = ref<string>('')
 </script>

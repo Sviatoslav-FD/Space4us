@@ -1,5 +1,5 @@
 <template>
-  <dialog ref="dialogRef" :open="model" class="border rounded border-teal-300 top-1/2 mx-auto z-10 text-teal-500 bg-teal-50">
+  <dialog ref="dialogRef" class="border rounded border-teal-300 top-1/2 mx-auto text-teal-500 bg-teal-50 backdrop:bg-opacity-10">
     <header class="p-1 text-center font-semibold">
       <slot name="header" />
     </header>
@@ -28,6 +28,9 @@ watch(model, (newValue) => {
         dialogs[i].close()
       }
     }
+    dialogRef.value?.showModal()
+  } else {
+    dialogRef.value?.close()
   };
 })
 

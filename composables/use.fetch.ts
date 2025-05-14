@@ -1,11 +1,15 @@
 interface UseFetchReturn {
+  isLoading: Ref<boolean>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fetchData: (url: string, method?: string, body?: unknown | null | undefined) => any
 }
 
 const baseUrl = 'https://space4us-node.vercel.app'
 
+const isLoading = ref(false)
+
 export function useFetch(): UseFetchReturn {
+
   const fetchData = async (url: string, method?: string, body?: unknown | null | undefined) => {
     const headers = {
       'Access-Control-Allow-Origin': '*',
@@ -36,6 +40,7 @@ export function useFetch(): UseFetchReturn {
   }
 
   return {
+    isLoading,
     fetchData,
   }
 }

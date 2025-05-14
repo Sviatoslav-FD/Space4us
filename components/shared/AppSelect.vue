@@ -1,31 +1,46 @@
 <template>
-  <div class="relative w-full text-teal-500">
+  <div class="relative text-teal-500" :class="{ 'w-full': !$slots.default }">
     <p v-if="label">{{ label }}<span v-if="required">*</span></p>
     <button
       ref="buttonRef"
-      class="p-1 rounded border border-gray-300 w-full text-left"
+      class="focus:outline-none"
+      :class="{ 'p-1 rounded border border-gray-300 w-full text-left pr-6': !$slots.default }"
       @click="onToggleOptions"
     >
-      <template v-if="model?.length">
-        <template v-if="multiple">
-          <p
-            v-for="option in model"
-            :key="String(option)"
-            class="px-1 border rounded border-gray-200 mb-1 flex justify-between"
-          >
-            {{ setTitle(option) }}
-            <span class="px-1" @click="onDeleteSelectedItem(option)">X</span>
-          </p>
+      <template v-if="!$slots.default">
+        <template v-if="model?.length">
+          <template v-if="multiple">
+            <p
+              v-for="option in model"
+              :key="String(option)"
+              class="px-1 border rounded border-gray-200 mb-1 flex justify-between"
+            >
+              {{ setTitle(option) }}
+              <span class="px-1" @click.stop="onDeleteSelectedItem(option)">X</span>
+            </p>
+          </template>
+          <span v-else>{{ setTitle() }}</span>
         </template>
-        <span v-else>{{ setTitle() }}</span>
+        <span v-else class="text-gray-300">{{ placeholder }}</span>
       </template>
-      <span v-else class="text-gray-300">{{ placeholder }}</span>
+      <slot v-else />
     </button>
     <ul
       ref="optionsRef"
-      class="absolute bg-gray-100 z-1 rounded border border-gray-200 w-full mt-1 max-h-83 overflow-y-auto shadow-lg"
+      class="absolute bg-gray-100 z-1 rounded border border-gray-200 w-full min-w-36 mt-1 max-h-83 overflow-y-auto shadow-lg"
       :class="{ hidden: !isOpen }"
     >
+      <li
+        v-if="add"
+        class="border-t border-gray-200 p-1 hover:bg-teal-50 cursor-pointer"
+        @click="onSelectOption(model)"
+      >
+        <input
+          v-model="model"
+          class="border border-teal-300 w-[90%] rounded px-1 focus:outline-none"
+          @click.stop
+        />
+      </li>
       <li
         v-for="option in options"
         :key="String(option)"
@@ -50,6 +65,7 @@ interface Props {
   placeholder?: string
   multiple?: boolean
   required?: boolean
+  add?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -60,6 +76,7 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: 'Select',
   multiple: false,
   required: false,
+  add: false,
 })
 
 const model = defineModel<string[] | string>()
@@ -86,7 +103,6 @@ const onSelectOption = (option: { [key: string]: string }): void => {
     }
   } else {
     model.value = value
-    console.log(model.value);
     isOpen.value = false
   }
 }
