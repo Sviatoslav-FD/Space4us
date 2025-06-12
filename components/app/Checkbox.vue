@@ -1,6 +1,11 @@
 <template>
   <label class="inline-flex items-center p-2">
-    <input v-model="model" type="checkbox" class="invisible w-0" @input="onInputHandler" />
+    <input
+      v-model="model"
+      type="checkbox"
+      class="invisible w-0"
+      @input="onInputHandler"
+    >
 
     <div
       class="inline-block w-4 h-4 border rounded"
@@ -29,7 +34,6 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  label: '',
   contenteditable: false,
 })
 

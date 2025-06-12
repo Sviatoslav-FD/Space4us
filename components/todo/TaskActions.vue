@@ -1,34 +1,47 @@
 <template>
   <div
     class="absolute flex transition-all duration-300 ml-2 h-full"
-    :class="[hoveredItemId === task.id ? 'right-0' : '-right-[100%]']"
+    :class="[hoveredItemId === id ? 'right-0' : '-right-[100%]']"
   >
-    <AppButton variant="icon" :data-edit="task.id">
+    <AppButton
+      v-if="isEdit"
+      variant="icon"
+      :data-edit="id"
+    >
       <IconEdit />
     </AppButton>
 
-    <AppButton variant="danger" :data-delete="task.id">
+    <AppButton
+      v-if="isDelete"
+      variant="danger"
+      :data-delete="id"
+    >
       <IconDelete />
     </AppButton>
 
-    <IconDrag class="cursor-move" />
+    <IconDrag
+      v-if="isDrag"
+      class="cursor-move"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { type TaskItem } from '@/types/index'
-import AppButton from '@/components/shared/AppButton.vue'
 import IconEdit from '@/components/icons/IconEdit.vue'
 import IconDelete from '@/components/icons/IconDelete.vue'
 import IconDrag from '@/components/icons/IconDrag.vue'
 
 interface Props {
-  task: TaskItem
+  id: string
   hoveredItemId: string
+  isEdit?: boolean
+  isDelete?: boolean
+  isDrag?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
-  type: 'button',
-  hoveredItemId: '',
+  isEdit: true,
+  isDelete: true,
+  isDrag: true,
 })
 </script>

@@ -1,11 +1,15 @@
 <template>
-  <div v-if="isLoading" class="fixed w-full h-full top-0 z-50 bg-white/30 backdrop-invert backdrop-opacity-30 flex items-center justify-center">
+  <div
+    v-if="isLoading"
+    class="fixed w-full h-full top-0 z-50 bg-white/30 backdrop-invert backdrop-opacity-30 flex items-center justify-center"
+  >
     <div class="w-15 h-15 bg-teal-100 rounded-full pulse" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useFetch } from '@/composables/use.fetch'
+
 const { isLoading } = useFetch()
 </script>
 

@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import AppSelect from '@/components/shared/AppSelect.vue'
 import AddTemplate from '@/components/todo/AddTemplate.vue'
 
 import IconTemplate from '@/components/icons/IconTemplate.vue'
@@ -24,6 +23,7 @@ import IconClear from '@/components/icons/IconClear.vue'
 import IconSettings from '@/components/icons/IconSettings.vue'
 
 import { useTodoList } from '@/composables/use.todo-list'
+
 const { view, onDeleteItems } = useTodoList()
 
 const settings = [

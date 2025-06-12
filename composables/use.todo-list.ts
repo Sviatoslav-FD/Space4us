@@ -1,5 +1,5 @@
 import { type Ref, type ComputedRef, ref, computed } from 'vue'
-import { type TaskItem } from '@/types/index'
+import type { TaskItem } from '@/types/index'
 import { useFetch } from '@/composables/use.fetch'
 
 interface UseTodoListReturn {
@@ -12,6 +12,7 @@ interface UseTodoListReturn {
   dates: ComputedRef<string[]>
   filteredTasks: ComputedRef<TaskItem[]>
   view: Ref<string>
+  defaultItem: TaskItem
   getTasks: () => Promise<void>
   onAddTaskFormSubmit: () => void
   onClearForm: () => void
@@ -48,7 +49,7 @@ const formTask = ref<TaskItem>({ ...defaultItem })
 export function useTodoList(): UseTodoListReturn {
   const filteredTasks = computed(() => {
     if (selectedCategory.value) {
-      return tasks.value.filter((task) => task.category === selectedCategory.value)
+      return tasks.value.filter(task => task.category === selectedCategory.value)
     }
     return tasks.value
   })
@@ -58,7 +59,7 @@ export function useTodoList(): UseTodoListReturn {
   })
 
   const dates = computed((): string[] => {
-    return [...new Set(tasks.value?.map(item => {
+    return [...new Set(tasks.value?.map((item) => {
       return item.date ? new Date(item.date).toLocaleDateString() : 'No date'
     }))]
   })
@@ -68,7 +69,12 @@ export function useTodoList(): UseTodoListReturn {
       return
     }
 
-    isTaskEdit.value ? onEditTask() : onAddTask()
+    if (isTaskEdit.value) {
+      onEditTask()
+    }
+    else {
+      onAddTask()
+    }
   }
 
   const getTasks = async (): Promise<void> => {
@@ -77,9 +83,11 @@ export function useTodoList(): UseTodoListReturn {
 
     try {
       tasks.value = await fetchData('/tasks')
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error:', error)
-    } finally {
+    }
+    finally {
       isLoading.value = false
     }
   }
@@ -94,9 +102,11 @@ export function useTodoList(): UseTodoListReturn {
       await fetchData('/tasks/add', 'POST', task)
       await getTasks()
       onClearForm()
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error:', error)
-    } finally {
+    }
+    finally {
       isLoading.value = false
     }
   }
@@ -109,16 +119,18 @@ export function useTodoList(): UseTodoListReturn {
       await fetchData(`/tasks/edit`, 'PUT', task || formTask.value)
       await getTasks()
       onClearForm()
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error:', error)
-    } finally {
+    }
+    finally {
       isLoading.value = false
     }
   }
 
   const onStartEditTask = (id: string): void => {
     isTaskEdit.value = true
-    const editTask = tasks.value.find((item) => item.id === id)
+    const editTask = tasks.value.find(item => item.id === id)
     if (!editTask) return
     formTask.value = { ...editTask }
     setTimeout(() => isTaskAddDialogOpen.value = true, 0)
@@ -132,14 +144,16 @@ export function useTodoList(): UseTodoListReturn {
   const onDeleteItems = async (id: string): Promise<void> => {
     const { isLoading, fetchData } = useFetch()
     isLoading.value = true
-
+    console.log('onDeleteItems', id)
     try {
       await fetchData(`/tasks/delete/${id}`, 'DELETE')
       await getTasks()
       onClearForm()
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error:', error)
-    } finally {
+    }
+    finally {
       isLoading.value = false
     }
   }
@@ -161,6 +175,7 @@ export function useTodoList(): UseTodoListReturn {
     dates,
     filteredTasks,
     view,
+    defaultItem,
     getTasks,
     onAddTaskFormSubmit,
     onClearForm,

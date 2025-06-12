@@ -4,18 +4,17 @@ interface UseFetchReturn {
   fetchData: (url: string, method?: string, body?: unknown | null | undefined) => any
 }
 
-const baseUrl = 'https://space4us-node.vercel.app'
+const baseUrl = 'http://localhost:7777'
 
 const isLoading = ref(false)
 
 export function useFetch(): UseFetchReturn {
-
   const fetchData = async (url: string, method?: string, body?: unknown | null | undefined) => {
     const headers = {
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json',
-      Connection: 'keep-alive',
-      Accept: '*/*',
+      'Connection': 'keep-alive',
+      'Accept': '*/*',
     }
 
     try {
@@ -30,10 +29,12 @@ export function useFetch(): UseFetchReturn {
 
       const json = await response.json()
       return json
-    } catch (error) {
+    }
+    catch (error) {
       if (error instanceof Error) {
         console.error(error.message)
-      } else {
+      }
+      else {
         console.error('An unknown error occurred')
       }
     }

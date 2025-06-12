@@ -2,9 +2,9 @@
   <form @submit.prevent="onAddTaskFormSubmit">
     <div class="grid grid-cols-4 gap-1 mb-1">
       <AppInput
+        ref="taskTitleRef"
         v-model="formTask.title"
         placeholder="What to do?*"
-        ref="taskTitleRef"
         required
       />
 
@@ -36,11 +36,8 @@
 </template>
 
 <script setup lang="ts">
-import AppInput from '@/components/shared/AppInput.vue'
-import AppSelect from '@/components/shared/AppSelect.vue'
-import AppTextarea from '@/components/shared/AppTextarea.vue'
-
 import { useTodoList } from '@/composables/use.todo-list'
+
 const { tasks, formTask, categories, onAddTaskFormSubmit } = useTodoList()
 
 const taskTitleRef = ref<HTMLElement | null>(null)

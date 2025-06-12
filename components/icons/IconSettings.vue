@@ -1,5 +1,9 @@
 <template>
-  <svg width="18px" height="18px" viewBox="0 0 24 24">
+  <svg
+    width="18px"
+    height="18px"
+    viewBox="0 0 24 24"
+  >
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"

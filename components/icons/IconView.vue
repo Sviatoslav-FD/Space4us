@@ -1,5 +1,9 @@
 <template>
-  <svg width="15px" height="15px" viewBox="0 0 52 52">
+  <svg
+    width="15px"
+    height="15px"
+    viewBox="0 0 52 52"
+  >
     <path
       d="M50,15.52H2a2,2,0,0,1-2-2V2A2,2,0,0,1,2,0H50a2,2,0,0,1,2,2V13.52A2,2,0,0,1,50,15.52Zm-46-4H48V4H4Z"
     />

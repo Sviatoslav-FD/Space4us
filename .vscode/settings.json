@@ -1,5 +1,10 @@
 {
   "cSpell.words": [
     "Orbitron"
-  ]
+  ],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+  },
+  "files.autoSaveWhenNoErrors": true
 }

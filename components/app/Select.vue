@@ -1,6 +1,11 @@
 <template>
-  <div class="relative text-teal-500" :class="{ 'w-full': !$slots.default }">
-    <p v-if="label">{{ label }}<span v-if="required">*</span></p>
+  <div
+    class="relative text-teal-500"
+    :class="{ 'w-full': !$slots.default }"
+  >
+    <p v-if="label">
+      {{ label }}<span v-if="required">*</span>
+    </p>
     <button
       ref="buttonRef"
       class="focus:outline-none"
@@ -16,12 +21,18 @@
               class="px-1 border rounded border-gray-200 mb-1 flex justify-between"
             >
               {{ setTitle(option) }}
-              <span class="px-1" @click.stop="onDeleteSelectedItem(option)">X</span>
+              <span
+                class="px-1"
+                @click.stop="onDeleteSelectedItem(option)"
+              >X</span>
             </p>
           </template>
           <span v-else>{{ setTitle() }}</span>
         </template>
-        <span v-else class="text-gray-300">{{ placeholder }}</span>
+        <span
+          v-else
+          class="text-gray-300"
+        >{{ placeholder }}</span>
       </template>
       <slot v-else />
     </button>
@@ -39,7 +50,7 @@
           v-model="model"
           class="border border-teal-300 w-[90%] rounded px-1 focus:outline-none"
           @click.stop
-        />
+        >
       </li>
       <li
         v-for="option in options"
@@ -58,7 +69,7 @@ import { ref, onMounted } from 'vue'
 import { clickOutside } from '@/helpers'
 
 interface Props {
-  options: any[]
+  options: []
   value?: string
   title?: string
   label?: string | null
@@ -69,7 +80,6 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  options: () => [],
   value: 'id',
   title: 'title',
   label: null,
@@ -89,9 +99,9 @@ const onToggleOptions = (event: Event): void => {
 }
 
 const setTitle = (id?: string) => {
-  if(typeof model.value === 'string') return model.value
+  if (typeof model.value === 'string') return model.value
   const value = id || model.value
-  return props.options.find((i) => i[props.value] === value)?.[props.title]
+  return props.options.find(i => i[props.value] === value)?.[props.title]
 }
 
 const onSelectOption = (option: { [key: string]: string }): void => {
@@ -101,7 +111,8 @@ const onSelectOption = (option: { [key: string]: string }): void => {
     if (!model.value?.includes(value)) {
       model.value?.push(value)
     }
-  } else {
+  }
+  else {
     model.value = value
     isOpen.value = false
   }
@@ -109,7 +120,7 @@ const onSelectOption = (option: { [key: string]: string }): void => {
 
 const onDeleteSelectedItem = (value: string): void => {
   if (!Array.isArray(model.value)) return
-  model.value = model.value?.filter((i) => i !== value)
+  model.value = model.value?.filter(i => i !== value)
 }
 
 const buttonRef = ref<HTMLElement | null>(null)

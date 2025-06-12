@@ -1,5 +1,8 @@
 <template>
-  <label class="text-teal-500" :class="{ 'user-invalid:text-red-700': required && !model }">
+  <label
+    class="text-teal-500"
+    :class="{ 'user-invalid:text-red-700': required && !model }"
+  >
     <p v-if="label">{{ label }}<span v-if="required">*</span></p>
     <textarea
       v-model="model"

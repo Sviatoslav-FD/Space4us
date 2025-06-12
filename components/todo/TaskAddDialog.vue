@@ -1,30 +1,39 @@
 <template>
-  <AppDialog v-model="model">
-    <div class="px-2">
-      <ToDoAddForm />
-    </div>
+  <div class="px-2">
+    <ToDoAddForm />
+  </div>
 
-    <template #footer>
-      <button class="rounded px-4 py-2 cursor-pointer hover:bg-teal-100 w-1/3" @click="onAddTaskFormSubmit">
-        {{ isTaskEdit ? 'Edit' : 'Add' }}
-      </button>
-      <button class="rounded px-4 py-2 cursor-pointer hover:bg-teal-100 w-1/3" @click="onClearForm">Clear</button>
-      <button class="rounded px-4 py-2 cursor-pointer hover:bg-teal-100 w-1/3" @click="onCancelForm">Cancel</button>
-    </template>
-  </AppDialog>
+  <div class="text-sm flex">
+    <AppButton
+      variant="dialog"
+      @click="onAddTaskFormSubmit"
+    >
+      {{ isTaskEdit ? 'Edit' : 'Add' }}
+    </AppButton>
+    <AppButton
+      variant="dialog"
+      @click="onClearForm"
+    >
+      Clear
+    </AppButton>
+    <AppButton
+      variant="dialog"
+      @click="onCancelForm"
+    >
+      Cancel
+    </AppButton>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import AppDialog from '@/components/shared/AppDialog.vue'
 import ToDoAddForm from '@/components/todo/ToDoAddForm.vue'
 
 import { useTodoList } from '@/composables/use.todo-list'
-const { isTaskEdit, onAddTaskFormSubmit, onClearForm } = useTodoList()
 
-const model = defineModel<boolean>()
+const { isTaskEdit, isTaskAddDialogOpen, onAddTaskFormSubmit, onClearForm } = useTodoList()
 
-function onCancelForm (): void {
-  model.value = false
+function onCancelForm(): void {
+  isTaskAddDialogOpen.value = false
   onClearForm()
 }
 </script>
